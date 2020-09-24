@@ -6,7 +6,7 @@ $(document).ready(function(){
       $(".error").hide();
       var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
       var emailblockReg =
-       /^([\w-\.]+@(?!gmail.com)(?!yahoo.com)(?!hotmail.com)([\w-]+\.)+[\w-]{2,4})?$/;
+       /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         
       var emailaddressVal = $(".email").val();
       if(emailaddressVal == '') {
@@ -38,14 +38,13 @@ $(document).ready(function(){
 
 //   Generate Images on Load 
 
-  const numItemsToGenerate = 8; //how many gallery items you want on the screen
-  const numImagesAvailable = "145"; //how many total images are in the collection you are pulling from
-  const imageWidth = 225; //your desired image width in pixels
-  const imageHeight = 225; //desired image height in pixels
-  const collectionID = 894; //the collection ID from the original url
+  const numItemsToGenerate = 4; //how many gallery items you want on the screen
+  const numImagesAvailable = 175135; //how many total images are in the collection you are pulling from
+  const imageWidth = 375; //your desired image width in pixels
+  const imageHeight = 375; //desired image height in pixels  
 
   function renderGalleryItem(randomNumber){
-     fetch(`https://source.unsplash.com/collection/${collectionID}/${imageWidth}x${imageHeight}/?sig=${randomNumber}`) 
+     fetch(`https://source.unsplash.com/random//${imageWidth}x${imageHeight}/?sig=${randomNumber}`) 
      .then((response)=> {    
       let galleryItem = document.createElement('div');
       galleryItem.classList.add('gallery-item');
@@ -56,7 +55,7 @@ $(document).ready(function(){
       $( ".pictures" ).prepend(galleryItem);
     });
   }
-  
+
   for(let i=0;i<numItemsToGenerate;i++){
     let randomImageIndex = Math.floor(Math.random() * numImagesAvailable);
     renderGalleryItem(randomImageIndex);
@@ -69,7 +68,7 @@ $(document).ready(function(){
     $('.image_box').remove();
   }
 
-  function renderGalleryItems () {
+  function renderGalleryItems() {
     for(let i=0;i<numItemsToGenerate;i++){
       let randomImageIndex = Math.floor(Math.random() * numImagesAvailable);
       renderGalleryItem(randomImageIndex);
@@ -88,50 +87,23 @@ $(document).ready(function(){
     $(".error").remove();
   });
 
-  $(document).on('click', ".gallery-item", function() {
-    $(".pictures").append(renderGalleryItem);
-  });
+function createImageBox(){
+  const imageBox = document.createElement('div');
+    imageBox.classList.add('image_box');
+    $(".image_container").append(imageBox);
+    $(".image_box").append($(".email_v"));
+    $(".image_box").append($(".chosen"));   
+}        
 
-// Create the Array of images to send in an email 
-
-    // var user_selection = [];    
-    // var user_email = $("[user_email^='.email[]']").map(function(){return $(this).val();
-    // }).get();
-    // var user_images = $("[user_images^='.gallery-item[]']").map(function(){return $(this).val();
-    // }).get();
-    // $('.btn-submit').on('click', function(e) {
-    //     e.preventDefault();
-    //     user_email.push($(this).val);
-    // });
-    // $('.gallery-item').on('click', function(e) {
-    //     e.preventDefault();
-    //     user_images.push($(this).val);              
-    // });   
-    // //    simulate click
-    //    setTimeout(() => combineArray(), 1000);       
-    //    function combineArray() {
-    //      user_selection.push(user_email);
-    //      user_selection.push(user_images);
-    //      console.log(user_selection);
-    //    }
-
-       function createImageBox(){
-        const imageBox = document.createElement('div');
-        imageBox.classList.add('image_box');
-        $(".image_container").append(imageBox);
-        $(".image_box").append($(".email_v"));
-        $(".image_box").append($(".chosen"));   
-    }        
-
-    $('#selection-confirm').on('click', function() {  
-        $(".error").hide();
-        if( $.trim( $('.email-checked').html() ).length == 0 ) {
-            return $("#selection-confirm").after('<span class="error">Please enter and confirm an email address.</span>');            
-    }
-        else if( $.trim( $('.images_selected').html() ).length == 0 ){  
-            return $("#selection-confirm").after('<span class="error">Please select atleast one image.</span>');
-    }   else {
-        $(".error").hide();
+$('#selection-confirm').on('click', function() {  
+  $(".error").hide();
+    if( $.trim( $('.email-checked').html() ).length == 0 ) {
+      return $("#selection-confirm").after('<span class="error">Please enter and confirm an email address.</span>');            
+  }
+  else if( $.trim( $('.images_selected').html() ).length == 0 ){  
+          return $("#selection-confirm").after('<span class="error">Please select atleast one image.</span>');
+  } else {
+      $(".error").hide();
         $(".chosen").toggleClass("final_image")
         $(".email_v").toggleClass("email_f")
         createImageBox() 
